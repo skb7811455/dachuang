@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/assets/bus.js"],"names":["bus"],"mappings":"wFACWA,EAAM,cAAI","file":"static/js/0.30e6c3a2afe215b69ed5.js","sourcesContent":["import Vue from 'vue'\r\nexport var bus = new Vue();\n\n\n// WEBPACK FOOTER //\n// ./src/assets/bus.js"],"sourceRoot":""}
