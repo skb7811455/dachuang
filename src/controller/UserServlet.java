@@ -38,10 +38,6 @@ public class UserServlet extends HttpServlet {
         List<String> info = new ArrayList<String>() ;   //  ’ºØ¥ÌŒÛ
         
         
-        System.out.println(userid);
-        System.out.println(userpass);
-        
-        
         HttpSession session = req.getSession(true);
         
         if(session.getAttribute("user")!=null){

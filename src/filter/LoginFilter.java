@@ -37,8 +37,8 @@ public class LoginFilter implements Filter {
 		// 获得用户请求的URI
 		String path = servletRequest.getRequestURI();
 		String user=(String)session.getAttribute("user");
-		System.out.println(user);
-		System.out.println(session.getId());
+		System.out.println("当前登录用户为"+user);
+		System.out.println("当前用户sessionID为"+session.getId());
 		
 		if(path.indexOf("Login")>-1){
 			chain.doFilter(servletRequest, servletResponse);
@@ -52,6 +52,7 @@ public class LoginFilter implements Filter {
 			jsonObject.put("code", "0");
 			jsonObject.put("message", "用户未登录");
 			servletResponse.getWriter().write(jsonObject.toString());
+			
 		}else{
 			chain.doFilter(request, response);
 		}
