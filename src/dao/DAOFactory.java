@@ -8,5 +8,5 @@ public class DAOFactory {
         return new SaleGoodDAOProxy() ;
     }
 	
-	
+
 }

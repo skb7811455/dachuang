@@ -3,7 +3,7 @@ package uitls;
 import java.sql.* ;
 public class DatabaseConnection {
     private static final String DBDRIVER = "com.mysql.jdbc.Driver" ;
-    private static final String DBURL = "jdbc:mysql://localhost:3306/project" ;
+    private static final String DBURL = "jdbc:mysql://localhost:3306/day11?useUnicode=true&characterEncoding=UTF8" ;
     private static final String DBUSER = "root" ;
     private static final String DBPASSWORD = "7811455" ;
     private Connection conn = null ;

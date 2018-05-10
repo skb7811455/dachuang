@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -11,84 +10,69 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import dao.DAOFactory;
 import model.User;
 import net.sf.json.JSONObject;
+import service.Recommendation;
 
 /**
  * Servlet implementation class UserServlet
  */
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
-	public void doGet(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+	private Recommendation rec;
+	public void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException{
         
 		
 		
 		String path = "index.html" ;     
-        String userid = req.getParameter("id") ;
-        String userpass = req.getParameter("password") ;
-        
-        resp.setContentType("utf-8"); 
-        resp.setCharacterEncoding("utf-8"); 
-        JSONObject jsonObject = new JSONObject();  //´´½¨Json¶ÔÏó
-        
-        
-        
-        List<String> info = new ArrayList<String>() ;   // ÊÕ¼¯´íÎó
-        
-        
-        HttpSession session = req.getSession(true);
+        String userid = request.getParameter("id") ;
+        String userpass = request.getParameter("password") ;
+        response.setContentType("utf-8"); 
+        response.setCharacterEncoding("utf-8"); 
+        JSONObject jsonObject = new JSONObject();  
+        HttpSession session = request.getSession(true);
         
         if(session.getAttribute("user")!=null){
-        	jsonObject.put("code", "1");         //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
-            jsonObject.put("message", "ÒÑ¾­µÇÂ¼");
-            System.out.println("ÓÃ»§ÒÑ¾­µÇÂ¼");
+        	jsonObject.put("code", "1");         //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Jsoné”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿï¿½
+            jsonObject.put("message", "å®¸èŒ¬ç²¡é§è¯²ç¶");
         }else{
         
         	if(userid==null || "".equals(userid)){
-        		info.add("ÓÃ»§id²»ÄÜÎª¿Õ£¡") ;
-        		jsonObject.put("code", "0");         //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
-                jsonObject.put("message", "ÓÃ»§id²»ÄÜÎª¿Õ!");
-        	}
-        	if(userpass==null || "".equals(userpass)){
-        		info.add("ÃÜÂë²»ÄÜÎª¿Õ£¡") ;
-        		jsonObject.put("code", "0");         //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
-                jsonObject.put("message", "ÓÃ»§ÃÜÂë²»ÄÜÎª¿Õ!");
-        	}
-        	if(info.size()==0){ // ÀïÃæÃ»ÓĞ¼ÇÂ¼ÈÎºÎµÄ´íÎó
+        		jsonObject.put("code", "0");         //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Jsoné”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿï¿½
+                jsonObject.put("message", "é¢ã„¦åŸ›éšå¶„ç¬‰é‘³æˆ’è´Ÿç»Œï¿½");
+        	}else if(userpass==null || "".equals(userpass)){
+        		jsonObject.put("code", "0");         //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Jsoné”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿï¿½
+                jsonObject.put("message", "ç€µå—™çˆœæ¶“å¶ˆå…˜æ¶“è™¹â”–");
+        	}else { 
         		User user = new User() ;
         		user.setUserid(userid) ;
         		user.setPassword(userpass) ;
         		try{
         			if(DAOFactory.getIUserDAOInstance().findLogin(user)){	
         				session.setAttribute("user", userid);
-        				jsonObject.put("code", "1");         //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
+        				jsonObject.put("code", "1");         //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Jsoné”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿï¿½
                         jsonObject.put("message", "success!");
-                        
                         JSONObject data=new JSONObject();
                         data.put("id", userid);
                         jsonObject.put("data", data.toString());
-                             //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
-                        info.add("ÓÃ»§µÇÂ½³É¹¦£¬»¶Ó­" + user.getName() + "¹âÁÙ£¡") ;
+                        this.rec=new Recommendation();
+                        rec.init();
+                        session.setAttribute("rec", this.rec);
         			} else {
-                        info.add("ÓÃ»§µÇÂ½Ê§°Ü£¬´íÎóµÄÓÃ»§ÃûºÍÃÜÂë£¡") ;
-                    	jsonObject.put("code", "0");         //ÉèÖÃJson¶ÔÏóµÄÊôĞÔ
-                        jsonObject.put("message", "´íÎóµÄÓÃ»§ÃûºÍÃÜÂë£¡");
+                    	jsonObject.put("code", "0");         //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Jsoné”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿï¿½
+                        jsonObject.put("message", "Failed");
                     }
                }catch(Exception e){
                 e.printStackTrace() ;
                }
         	}
         }
-        System.out.println(info);
-       
-        req.setAttribute("info",info) ;
-        resp.getWriter().write(jsonObject.toString());
+        response.getWriter().write(jsonObject.toString());
         
     }
-    public void doPost(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
-        this.doGet(req,resp) ;
+    public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException{
+        this.doGet(request,response) ;
     }
  
 

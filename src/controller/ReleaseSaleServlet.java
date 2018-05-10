@@ -35,49 +35,48 @@ public class ReleaseSaleServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		 
-	     String goodname = req.getParameter("name") ;
-	     String description = req.getParameter("description") ;
-	     String picture = req.getParameter("img") ;
-	     String status = "9";
-	     String sprice = "10";
-	     String price = req.getParameter("price") ;
-	     String userid = (String)req.getSession().getAttribute("user");
-	     String bigsort = req.getParameter("sort") ;
-	     String place = req.getParameter("place") ;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 String picture = request.getParameter("img") ;
+		 String picture1 = request.getParameter("img1") ;
+		 String picture2 = request.getParameter("img2") ;
+		 String picture3 = request.getParameter("img3") ;
+	     String goodname = new String(request.getParameter("name").getBytes("ISO-8859-1"), "UTF-8") ;
+	     String description = new String(request.getParameter("description").getBytes("ISO-8859-1"), "UTF-8") ;
+	     
+	     String price = request.getParameter("price") ;
+	     String qq=request.getParameter("qq");
+	     String phone=request.getParameter("tel");
+	     String userid = (String)request.getSession().getAttribute("user");
+	     String bigsort = request.getParameter("sort") ;
+	     String place = new String(request.getParameter("place").getBytes("ISO-8859-1"), "UTF-8") ;
 	              
-	     System.out.println(picture);
 	     List<String> info = new ArrayList<String>() ;
 	     
-	     resp.setContentType("utf-8"); 
-	     resp.setCharacterEncoding("utf-8"); 
-	     JSONObject jsonObject = new JSONObject();  //´´½¨Json¶ÔÏó
+	     response.setContentType("utf-8"); 
+	     response.setCharacterEncoding("utf-8"); 
+	     JSONObject jsonObject = new JSONObject();  //ï¿½ï¿½ï¿½ï¿½Jsonï¿½ï¿½ï¿½ï¿½
 	     
 	     
 	     if(goodname==null||goodname.equals("")){
-	    	 info.add("ÉÌÆ·Ãû²»ÄÜÎª¿Õ");
+	    	 info.add("");
 	     }
 	     if(description==null||description.equals("")){
-	    	 info.add("ÉÌÆ·ÃèÊö²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     if(picture==null||picture.equals("")){
-	    	 info.add("ÉÌÆ··âÃæ²»ÄÜÎª¿Õ");
-	     }
-	     if(status==null||status.equals("")){
-	    	 info.add("ÉÌÆ·×´Ì¬²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½Æ·ï¿½ï¿½ï¿½æ²»ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     if(price==null||price.equals("")){
-	    	 info.add("ÉÌÆ·¼Û¸ñ²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½Æ·ï¿½Û¸ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     if(place==null||place.equals("")){
-	    	 info.add("½»Ò×µØµã²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½ï¿½×µØµã²»ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     if(userid==null||userid.equals("")){
-	    	 info.add("ËùÊôÓÃ»§²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     if(bigsort==null||bigsort.equals("")){
-	    	 info.add("ËùÊôÀàÐÍ²»ÄÜÎª¿Õ");
+	    	 info.add("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 	     }
 	     System.out.println(info);
 	     if(info.size()==0){
@@ -85,8 +84,11 @@ public class ReleaseSaleServlet extends HttpServlet {
 	    	 good.setName(goodname);
 	    	 good.setDescription(description);	 
 	    	 good.setImg(picture);
-	    	 good.setStatus(status);
-	    	 good.setSprice(Integer.parseInt(sprice));
+	    	 good.setImg1(picture1);
+	    	 good.setImg2(picture2);
+	    	 good.setImg3(picture3);
+	    	 good.setQq(qq);
+	    	 good.setTelephone(phone);
 	    	 good.setPrice(Integer.parseInt(price));
 	    	 good.setUserID(userid);
 	    	 good.setType(Integer.parseInt(bigsort));
@@ -102,7 +104,7 @@ public class ReleaseSaleServlet extends HttpServlet {
 	             if(DAOFactory.getISaleGoodDAOInstance().createSaleGood(good)){
 	              //JSONObject data=JSONObject.fromObject(good);
                   //jsonObject.put("data", data.toString());
-	              jsonObject.put("code", "1");         //ÉèÖÃJson¶ÔÏóµÄÊôÐÔ
+	              jsonObject.put("code", "1");         //ï¿½ï¿½ï¿½ï¿½Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 	          jsonObject.put("msg", "success");
 	             }
 	    	 }catch(Exception e){
@@ -110,11 +112,11 @@ public class ReleaseSaleServlet extends HttpServlet {
 	          }
 	    	 
 	     }else{
-	    	 jsonObject.put("code", "0");         //ÉèÖÃJson¶ÔÏóµÄÊôÐÔ
-	         jsonObject.put("msg", "ÐÅÏ¢²»ÍêÕû");
+	    	 jsonObject.put("code", "0");         //ï¿½ï¿½ï¿½ï¿½Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	         jsonObject.put("msg", "ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 	     }
 	     
-	     resp.getWriter().write(jsonObject.toString());
+	     response.getWriter().write(jsonObject.toString());
 	     
     	 
 	}

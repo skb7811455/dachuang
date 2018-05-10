@@ -30,7 +30,6 @@ public class LogServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		LogService log=new LogService();
-		System.out.println(2222);
 		String info=log.quitUser(request);
 		JSONObject jsonObject = new JSONObject(); 
 		jsonObject.put("code", 1);
